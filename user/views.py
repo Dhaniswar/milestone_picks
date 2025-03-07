@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+
+from user.sendgrid import send_sendgrid_email
 from .models import User
 from drf_yasg.utils import swagger_auto_schema
 from .serializers import (
@@ -85,15 +87,14 @@ class ForgotPasswordView(APIView):
             user = User.objects.filter(email=email).first()
             if user:
                 otp = ''.join(random.choices(string.digits, k=6))
-                cache.set(email, otp, timeout=300)
-                send_mail(
-                    'Password Reset OTP',
-                    f'Your OTP for password reset is {otp}',
-                    'from@example.com',
-                    [email],
-                    fail_silently=False,
-                )
-                return Response({'message': 'OTP sent to email'}, status=status.HTTP_200_OK)
+                cache.set(email, otp, timeout=300)  # OTP valid for 5 minutes
+                subject = 'Password Reset OTP'
+                body = f'Your OTP for password reset is {otp}. It will expire in 5 minutes.'
+                
+                # Send OTP via SendGrid
+                if send_sendgrid_email(subject, body, email):
+                    return Response({'message': 'OTP sent to email'}, status=status.HTTP_200_OK)
+                return Response({'error': 'Error sending OTP via email'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
