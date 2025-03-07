@@ -6,7 +6,7 @@ from .models import User
 # Customize the UserAdmin for your User model
 class CustomUserAdmin(UserAdmin):
     # Fields to display in the list view of the admin panel
-    list_display = ('email', 'username', 'is_verified', 'is_active', 'is_admin')
+    list_display = ('id', 'email', 'username', 'is_verified', 'is_active', 'is_admin')
     list_filter = ('is_admin', 'is_verified', 'is_active')  # Filters for the list view
     search_fields = ('email', 'username')  # Fields to search by in the admin panel
 
