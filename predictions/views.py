@@ -1,10 +1,15 @@
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
+from django.utils import timezone
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.filters import SearchFilter
 from milestone_picks.pagination import CustomPagination
 from .models import Sport, Match, Bet
 from .serializers import SportSerializer, MatchSerializer, BetSerializer
+from subscriptions.permissions import HasActiveSubscription 
+
+
+
 
 class SportViewSet(viewsets.ModelViewSet):
     queryset = Sport.objects.all()
@@ -55,15 +60,28 @@ class BetViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            # Only admins can create, update, or delete bets
             permission_classes = [IsAdminUser]
         else:
+            # Authenticated users can view bets (with restrictions)
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
+        user = self.request.user
+        if user.is_staff:
+            # Admins can see all bets
             return Bet.objects.all()
-        return Bet.objects.filter(user=self.request.user)
+        
+        # Filter bets based on subscription status
+        if HasActiveSubscription().has_permission(self.request, self):
+            # Users with an active subscription can see all their bets
+            return Bet.objects.filter(user=user)
+        else:
+            # Users without an active subscription can only see historical bets
+            yesterday = timezone.now() - timezone.timedelta(days=1)
+            return Bet.objects.filter(user=user, placed_at__lt=yesterday)
 
     def perform_create(self, serializer):
+        # Automatically assign the logged-in user as the bet creator
         serializer.save(user=self.request.user)
