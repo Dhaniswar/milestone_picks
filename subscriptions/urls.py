@@ -12,5 +12,4 @@ urlpatterns = [
     path('create-checkout-session/', CreateCheckoutSessionView.as_view(), name='create-checkout-session'),
     path('stripe-webhook/', stripe_webhook, name='stripe-webhook'),
     path('', include(router.urls)),
-    path('', include(router.urls)),
 ]
