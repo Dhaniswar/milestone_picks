@@ -29,7 +29,11 @@ SECRET_KEY = 'django-insecure-le5zhcl4x1-dmy6%ud&mxoc$k7bf)lnmk=qejq%c)do(8lb@!7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1:8000/api/docs/' ,'127.0.0.1:8000/admin/', '680d-103-156-26-46.ngrok-free.app', '680d-103-156-26-46.ngrok-free.app/api/docs/']
+
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000/api/docs/', 'http://127.0.0.1:8000/admin/' ,'https://680d-103-156-26-46.ngrok-free.app', 'https://680d-103-156-26-46.ngrok-free.app/api/docs/']
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 AUTH_USER_MODEL = 'user.User'
 
@@ -42,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'rest_framework_swagger',
     'drf_yasg',
     'django_filters',
@@ -55,6 +60,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

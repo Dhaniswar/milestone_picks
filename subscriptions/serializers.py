@@ -16,3 +16,4 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
 class CreateCheckoutSessionSerializer(serializers.Serializer):
     plan_id = serializers.IntegerField()
+    user_email = serializers.EmailField()
