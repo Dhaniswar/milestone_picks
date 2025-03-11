@@ -53,38 +53,46 @@ def stripe_webhook(request):
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
     event = None
 
+    print("Webhook received. Verifying signature...")
+
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, os.environ.get('STRIPE_WEBHOOK_SECRET')
         )
-    except ValueError:
+        print(f"Webhook event verified: {event['type']}")
+    except ValueError as e:
+        print(f"ValueError: {str(e)}")
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError:
+    except stripe.error.SignatureVerificationError as e:
+        print(f"SignatureVerificationError: {str(e)}")
         return HttpResponse(status=400)
 
-    # Handle the event when checkout session completes
+    # Handle the event
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
+        print(f"Checkout session completed: {session['id']}")
 
-        user_email = session.get('customer_email')  # Get customer email
-        subscription_id = session.get('subscription')  # Get subscription ID from Stripe
+        user_email = session.get('customer_email')
+        subscription_id = session.get('subscription')
         if not subscription_id:
-            return HttpResponse(status=400)  # Subscription ID is required
-        
+            print("Subscription ID not found in session")
+            return HttpResponse(status=400)
+
         # Fetch the Stripe subscription details
         stripe_subscription = stripe.Subscription.retrieve(subscription_id)
-
-        # Get the price ID from the subscription
         price_id = stripe_subscription['items']['data'][0]['price']['id']
 
         # Retrieve the corresponding Plan from the database
         try:
             user = User.objects.get(email=user_email)
             plan = Plan.objects.get(stripe_plan_id=price_id)
+            print(f"User: {user.id}, Plan: {plan.name}")
         except User.DoesNotExist:
-            return HttpResponse(status=400)  # User not found
+            print(f"User not found: {user_email}")
+            return HttpResponse(status=400)
         except Plan.DoesNotExist:
-            return HttpResponse(status=400)  # Plan not found
+            print(f"Plan not found: {price_id}")
+            return HttpResponse(status=400)
 
         # Calculate subscription end date based on plan duration
         start_date = timezone.now()
@@ -106,9 +114,9 @@ def stripe_webhook(request):
             start_date=start_date,
             end_date=end_date
         )
+        print("Subscription created successfully.")
 
     return HttpResponse(status=200)
-
 
 
 
