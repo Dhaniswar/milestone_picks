@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'user',
     'predictions',
     'subscriptions',
+    'core',
 ]
 
 MIDDLEWARE = [
