@@ -13,12 +13,11 @@ schema_view = get_schema_view(
       title="Milestone Picks",
       default_version='v1',
       description="Milestone description",
-      terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@snippets.local"),
       license=openapi.License(name="BSD License"),
    ),
    public=True,
    permission_classes=[permissions.AllowAny],
+   # url="https://680d-103-156-26-46.ngrok-free.app",
 )
 
 urlpatterns = [

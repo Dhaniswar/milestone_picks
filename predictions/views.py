@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from django.utils import timezone
+from rest_framework import parsers, renderers
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.filters import SearchFilter
 from rest_framework import parsers, renderers
@@ -42,9 +43,9 @@ class SportViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         # Log to check if the image is being saved properly during update
         sport = serializer.save()
-        # if sport.icon:
-        #     print(f"Image file path: {sport.icon.url}")  # Log the file path
-        #     print(f"Image file URL: {sport.icon.url}") 
+        if sport.icon:
+            print(f"Image file path: {sport.icon.url}")  # Log the file path
+            print(f"Image file URL: {sport.icon.url}") 
     
 
 class MatchViewSet(viewsets.ModelViewSet):
