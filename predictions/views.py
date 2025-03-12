@@ -3,6 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.utils import timezone
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.filters import SearchFilter
+from rest_framework import parsers, renderers
 from milestone_picks.pagination import CustomPagination
 from .models import Sport, Match, Bet
 from .serializers import SportSerializer, MatchSerializer, BetSerializer
@@ -12,6 +13,8 @@ from subscriptions.permissions import HasActiveSubscription
 
 
 class SportViewSet(viewsets.ModelViewSet):
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.FileUploadParser)
+    renderer_classes = (renderers.JSONRenderer,)
     queryset = Sport.objects.all()
     serializer_class = SportSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
@@ -27,7 +30,21 @@ class SportViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
     
-    
+    def perform_create(self, serializer):
+        # Log to check if the image is being saved properly
+        sport = serializer.save()
+        if sport.icon:
+            print(f"Image file path: {sport.icon.url}")  # Log the file path
+            print(f"Image file URL: {sport.icon.url}")    # Log the URL that is generated
+        else:
+            print("No icon image was provided.")
+
+    def perform_update(self, serializer):
+        # Log to check if the image is being saved properly during update
+        sport = serializer.save()
+        # if sport.icon:
+        #     print(f"Image file path: {sport.icon.url}")  # Log the file path
+        #     print(f"Image file URL: {sport.icon.url}") 
     
 
 class MatchViewSet(viewsets.ModelViewSet):
