@@ -29,9 +29,8 @@ SECRET_KEY = 'django-insecure-le5zhcl4x1-dmy6%ud&mxoc$k7bf)lnmk=qejq%c)do(8lb@!7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1:8000/api/docs/' ,'127.0.0.1:8000/admin/', '680d-103-156-26-46.ngrok-free.app', '680d-103-156-26-46.ngrok-free.app/api/docs/']
+ALLOWED_HOSTS = []
 
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000/api/docs/', 'http://127.0.0.1:8000/admin/' ,'https://680d-103-156-26-46.ngrok-free.app', 'https://680d-103-156-26-46.ngrok-free.app/api/docs/']
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -51,6 +50,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_filters',
     'rest_framework_simplejwt',
+    'storages',
     'user',
     'predictions',
     'subscriptions',
@@ -191,8 +191,37 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+# STORAGES configuration for both media and static files
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "access_key": os.environ.get("AWS_ACCESS_KEY_ID"),
+            "secret_key": os.environ.get("AWS_SECRET_ACCESS_KEY"),
+            "bucket_name": os.environ.get("AWS_STORAGE_BUCKET_NAME"),
+            "region_name": os.environ.get("AWS_S3_REGION_NAME"),
+            "custom_domain": f'{os.environ.get("AWS_STORAGE_BUCKET_NAME")}.s3.{os.environ.get("AWS_S3_REGION_NAME")}.amazonaws.com',
+        }
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    }
+}
+
+
+
+# # You can also configure where your static files will be served from S3
+STATIC_URL = f'https://{os.environ.get("AWS_STORAGE_BUCKET_NAME")}.s3.{os.environ.get("AWS_S3_REGION_NAME")}.amazonaws.com/static/'
+
+
+
+
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -211,9 +240,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+

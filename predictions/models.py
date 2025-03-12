@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from milestone_picks.s3_setup import AWSSignedURL
 
 class Sport(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -7,6 +8,13 @@ class Sport(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def sport_icon(self):
+        return {
+            "s3_obj": AWSSignedURL.get(
+                key=self.icon.name
+            ),
+        }
 
 class Match(models.Model):
     sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
