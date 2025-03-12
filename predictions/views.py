@@ -4,6 +4,7 @@ from django.utils import timezone
 from rest_framework import parsers, renderers
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.filters import SearchFilter
+from rest_framework import parsers, renderers
 from milestone_picks.pagination import CustomPagination
 from .models import Sport, Match, Bet
 from .serializers import SportSerializer, MatchSerializer, BetSerializer
@@ -29,7 +30,6 @@ class SportViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
-    
     
     def perform_create(self, serializer):
         # Log to check if the image is being saved properly

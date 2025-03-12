@@ -16,6 +16,13 @@ class Sport(models.Model):
             ),
         }
 
+    def sport_icon(self):
+        return {
+            "s3_obj": AWSSignedURL.get(
+                key=self.icon.name
+            ),
+        }
+
 class Match(models.Model):
     sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
     team_1 = models.CharField(max_length=100)

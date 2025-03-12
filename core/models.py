@@ -13,7 +13,7 @@ class HeroSection(models.Model):
     def sport_icon(self):
         return {
             "s3_obj": AWSSignedURL.get(
-                key=self.icon.name
+                key=self.image.name
             ),
         }
     
@@ -26,7 +26,7 @@ class SportCategory(models.Model):
     def __str__(self):
         return self.name
     
-    def sport_category_icon(self):
+    def sport_icon(self):
         return {
             "s3_obj": AWSSignedURL.get(
                 key=self.icon.name
