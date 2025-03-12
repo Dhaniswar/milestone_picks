@@ -17,7 +17,7 @@ schema_view = get_schema_view(
    ),
    public=True,
    permission_classes=[permissions.AllowAny],
-   url="https://680d-103-156-26-46.ngrok-free.app",
+   # url="https://680d-103-156-26-46.ngrok-free.app",
 )
 
 urlpatterns = [
