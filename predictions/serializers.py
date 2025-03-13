@@ -12,11 +12,6 @@ class SportSerializer(ModelSerializer):
             return f'https://{settings.AWS_S3_CUSTOM_DOMAIN}/{obj.icon.name}'
         return None
     
-    def get_icon(self, obj):
-        if obj.icon:
-            return f'https://{settings.AWS_S3_CUSTOM_DOMAIN}/{obj.icon.name}'
-        return None
-    
 
 class MatchSerializer(ModelSerializer):
     class Meta:
