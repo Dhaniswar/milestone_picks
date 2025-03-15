@@ -16,7 +16,7 @@ from subscriptions.permissions import HasActiveSubscription
 class SportViewSet(viewsets.ModelViewSet):
     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.FileUploadParser)
     renderer_classes = (renderers.JSONRenderer,)
-    queryset = Sport.objects.all()
+    queryset = Sport.objects.all().order_by('-id')
     serializer_class = SportSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['id', 'name']
@@ -49,7 +49,7 @@ class SportViewSet(viewsets.ModelViewSet):
     
 
 class MatchViewSet(viewsets.ModelViewSet):
-    queryset = Match.objects.all()
+    queryset = Match.objects.all().order_by('-id')
     serializer_class = MatchSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['id', 'sport', 'team_1', 'team_2', 'match_date', 'location']
@@ -68,7 +68,7 @@ class MatchViewSet(viewsets.ModelViewSet):
 
 
 class BetViewSet(viewsets.ModelViewSet):
-    queryset = Bet.objects.all()
+    queryset = Bet.objects.all().order_by('-id')
     serializer_class = BetSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['id', 'user', 'match', 'bet_type', 'odds', 'amount', 'placed_at', 'result']
@@ -86,7 +86,15 @@ class BetViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return Bet.objects.none()
+        
         user = self.request.user
+        
+        if user is None or user.is_anonymous:
+            # Return an empty queryset for unauthenticated users
+            return Bet.objects.none()
+        
         if user.is_staff:
             # Admins can see all bets
             return Bet.objects.all()
