@@ -9,7 +9,7 @@ from .serializers import HeroSectionSerializer, SportCategorySerializer, Contact
 
 
 class HeroSectionViewSet(ModelViewSet):
-    queryset = HeroSection.objects.all()
+    queryset = HeroSection.objects.all().order_by('-id')
     filter_backends = [DjangoFilterBackend, SearchFilter]
     serializer_class = HeroSectionSerializer
     permission_classes = [IsAuthenticated]
@@ -23,7 +23,7 @@ class HeroSectionViewSet(ModelViewSet):
 
 
 class SportCategoryViewSet(ModelViewSet):
-    queryset = SportCategory.objects.all()
+    queryset = SportCategory.objects.all().order_by('-id')
     serializer_class = SportCategorySerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     permission_classes = [IsAuthenticated]
@@ -35,7 +35,7 @@ class SportCategoryViewSet(ModelViewSet):
     
 
 class ContactUsViewSet(ModelViewSet):
-    queryset = ContactUs.objects.all()
+    queryset = ContactUs.objects.all().order_by('-id')
     serializer_class = ContactUsSerialiser
     filter_backends = [DjangoFilterBackend, SearchFilter]
     permission_classes = [IsAuthenticated]

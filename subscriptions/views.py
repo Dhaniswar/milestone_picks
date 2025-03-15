@@ -136,4 +136,13 @@ class SubscriptionViewSet(ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Subscription.objects.filter(user=self.request.user)
+        if getattr(self, 'swagger_fake_view', False):
+            # Skip logic during schema generation
+            return Subscription.objects.none()
+        
+        user = self.request.user
+        if user is None or user.is_anonymous:
+            # Return an empty queryset for unauthenticated users
+            return Subscription.objects.none()
+
+        return Subscription.objects.filter(user=user)

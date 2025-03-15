@@ -6,6 +6,9 @@ class HeroSection(models.Model):
     title = models.CharField(max_length=200)
     subtitle = models.CharField(max_length=200)
     image = models.ImageField(upload_to='hero_images/')
+    
+    class Meta:
+        ordering = ['-id']
 
     def __str__(self):
         return self.title
@@ -22,6 +25,9 @@ class SportCategory(models.Model):
     title = models.CharField(max_length=200)
     name = models.CharField(max_length=100)
     icon = models.ImageField(upload_to='sport_icons/')
+    
+    class Meta:
+        ordering = ['-id']
 
     def __str__(self):
         return self.name
@@ -39,6 +45,9 @@ class ContactUs(models.Model):
     email = models.EmailField(unique=True, null=True, blank=False, default=None)
     phone = models.CharField(max_length=18, unique=True, null=True, blank=True, default=None)
     message = models.TextField(null=True, blank=True, default=None)
+    
+    class Meta:
+        ordering = ['-id']
     
     
     def __str__(self):
