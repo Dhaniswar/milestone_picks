@@ -19,9 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-le5zhcl4x1-dmy6%ud&mxoc$k7bf)lnmk=qejq%c)do(8lb@!7')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['milestone-env.eba-igcjukaw.eu-north-1.elasticbeanstalk.com' ,'localhost', '0.0.0.0', '127.0.0.1']
 
 
 CORS_ALLOW_ALL_ORIGINS = True
