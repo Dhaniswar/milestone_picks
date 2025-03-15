@@ -21,7 +21,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-le5zhcl4x1-dmy6%ud&mx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ['milestone-env.eba-igcjukaw.eu-north-1.elasticbeanstalk.com' ,'localhost', '0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['milestone-picks.eba-qcwqtc55.eu-north-1.elasticbeanstalk.com' ,'localhost', '0.0.0.0', '127.0.0.1']
 
 
 CORS_ALLOW_ALL_ORIGINS = True
