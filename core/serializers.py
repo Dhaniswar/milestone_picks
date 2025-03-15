@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import HeroSection, SportCategory
+from .models import HeroSection, SportCategory, ContactUs
 
 class HeroSectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,3 +13,9 @@ class SportCategorySerializer(serializers.ModelSerializer):
         model = SportCategory
         fields = ['id', 'title', 'name', 'icon']
 
+
+class ContactUsSerialiser(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ContactUs
+        fields = ['id', 'full_name', 'email', 'phone', 'message']

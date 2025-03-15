@@ -32,3 +32,17 @@ class SportCategory(models.Model):
                 key=self.icon.name
             ),
         }
+
+
+class ContactUs(models.Model):
+    full_name = models.CharField(max_length=256, null=True, blank=False, default=None)
+    email = models.EmailField(unique=True, null=True, blank=False, default=None)
+    phone = models.CharField(max_length=18, unique=True, null=True, blank=True, default=None)
+    message = models.TextField(null=True, blank=True, default=None)
+    
+    
+    def __str__(self):
+        return f'{self.full_name} and {self.message}'
+
+
+
