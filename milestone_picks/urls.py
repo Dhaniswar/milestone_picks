@@ -6,10 +6,18 @@ from milestone_picks import settings
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.http import JsonResponse  # Add this import
 
+# Health check view
+def health_check(request):
+    """
+    Simple health check endpoint.
+    Returns a 200 OK response with a status message.
+    """
+    return JsonResponse({"status": "ok", "message": "Application is healthy"})
 
-
+# Swagger schema view
 schema_view = get_schema_view(
    openapi.Info(
       title="Milestone Picks",
@@ -19,10 +27,10 @@ schema_view = get_schema_view(
    ),
    public=True,
    permission_classes=[permissions.AllowAny],
-   # url="https://680d-103-156-26-46.ngrok-free.app",
 )
 
 urlpatterns = [
+    path('', health_check, name='health_check'),  # Health check endpoint
     path('admin/', admin.site.urls),
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('core/', include('core.urls')),
