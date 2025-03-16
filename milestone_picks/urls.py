@@ -30,7 +30,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('', health_check, name='health_check'),  # Health check endpoint
+    path('health/', health_check, name='health_check'),  # Health check endpoint
     path('admin/', admin.site.urls),
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('core/', include('core.urls')),
