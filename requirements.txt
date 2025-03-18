@@ -11,6 +11,7 @@ coreschema==0.0.4
 Django==5.1.6
 django-admin==2.0.2
 django-cors-headers==4.7.0
+django-countries==7.6.1
 django-excel-response2==3.0.6
 django-filter==25.1
 django-rest-swagger==2.2.0
