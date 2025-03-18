@@ -14,6 +14,7 @@ from subscriptions.permissions import HasActiveSubscription
 
 
 class SportViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.FileUploadParser)
     renderer_classes = (renderers.JSONRenderer,)
     queryset = Sport.objects.all().order_by('-id')
