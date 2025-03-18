@@ -18,4 +18,4 @@ class ContactUsSerialiser(serializers.ModelSerializer):
     
     class Meta:
         model = ContactUs
-        fields = ['id', 'full_name', 'email', 'phone', 'message']
+        fields = ['id', 'full_name', 'email', 'phone', 'message', 'country']

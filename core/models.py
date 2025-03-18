@@ -1,5 +1,7 @@
 from django.db import models
 from milestone_picks.s3_setup import AWSSignedURL
+from django_countries.fields import CountryField
+
 
 
 class HeroSection(models.Model):
@@ -45,6 +47,7 @@ class ContactUs(models.Model):
     email = models.EmailField(unique=True, null=True, blank=False, default=None)
     phone = models.CharField(max_length=18, unique=True, null=True, blank=True, default=None)
     message = models.TextField(null=True, blank=True, default=None)
+    country = CountryField(blank_label="(select country)")
     
     class Meta:
         ordering = ['-id']
