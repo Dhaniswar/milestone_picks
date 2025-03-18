@@ -18,6 +18,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-le5zhcl4x1-dmy6%ud&mxoc$k7bf)lnmk=qejq%c)do(8lb@!7')
 
+# DEBUG=True
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
+
 # Set ALLOWED_HOSTS based on the environment
 if os.environ.get('DEBUG', 'False').lower() == 'true':
     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
@@ -25,6 +29,8 @@ else:
     ALLOWED_HOSTS = ['milestone-picks.eba-qcwqtc55.eu-north-1.elasticbeanstalk.com', '.elasticbeanstalk.com']
 
 CORS_ALLOWED_ORIGINS = ["https://milestone-picks.eba-qcwqtc55.eu-north-1.elasticbeanstalk.com"]
+
+
 
 AUTH_USER_MODEL = 'user.User'
 
@@ -50,6 +56,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'milestone_picks.middleware.HealthCheckMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware', 
