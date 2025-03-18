@@ -12,5 +12,5 @@ class SportCategoryAdmin(admin.ModelAdmin):
     
 @admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'full_name', 'email', 'phone', 'message']
+    list_display = ['id', 'full_name', 'email', 'phone', 'message', 'country']
     
