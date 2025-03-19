@@ -4,6 +4,7 @@ import string
 from django.core.cache import cache
 from django.core.mail import send_mail
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -21,6 +22,9 @@ from .serializers import (
 
 
 class UserRegistrationView(APIView):
+    
+    permission_classes = [AllowAny]
+    
     @swagger_auto_schema(request_body=UserRegistrationSerializer)
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
@@ -35,6 +39,10 @@ class UserRegistrationView(APIView):
 
 
 class VerifyOTPView(APIView):
+    
+    permission_classes = [AllowAny]
+    
+    
     @swagger_auto_schema(request_body=VerifyOTPSerializer)
     def post(self, request):
         serializer = VerifyOTPSerializer(data=request.data)
@@ -55,6 +63,10 @@ class VerifyOTPView(APIView):
 
 
 class LoginView(APIView):
+    
+    permission_classes = [AllowAny]
+    
+    
     @swagger_auto_schema(request_body=LoginSerializer)
     def post(self, request):
         
@@ -79,6 +91,9 @@ class LoginView(APIView):
     
 
 class ForgotPasswordView(APIView):
+    
+    permission_classes = [AllowAny]
+    
     @swagger_auto_schema(request_body=ForgotPasswordSerializer)
     def post(self, request):
         serializer = ForgotPasswordSerializer(data=request.data)
@@ -102,6 +117,9 @@ class ForgotPasswordView(APIView):
 
 
 class ResetPasswordView(APIView):
+    
+    permission_classes = [AllowAny]
+    
     @swagger_auto_schema(request_body=ResetPasswordSerializer)
     def post(self, request):
         serializer = ResetPasswordSerializer(data=request.data)

@@ -58,3 +58,17 @@ class ContactUs(models.Model):
 
 
 
+
+class FAQCategory(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class FAQ(models.Model):
+    main_heading = models.CharField(max_length=255, default="Frequently Asked Questions")
+    title = models.CharField(max_length=255)
+    title_description = models.TextField()
+    category = models.ForeignKey(FAQCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)

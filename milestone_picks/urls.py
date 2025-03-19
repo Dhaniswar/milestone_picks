@@ -9,6 +9,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.http import JsonResponse  # Add this import
+from subscriptions.views import success_view
 
 # Health check view
 def health_check(request):
@@ -28,6 +29,8 @@ schema_view = get_schema_view(
    ),
    public=True,
    permission_classes=[permissions.AllowAny],
+    # url="https://1afb-103-156-26-47.ngrok-free.app",
+
 )
 
 urlpatterns = [
@@ -38,6 +41,7 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('predictions/', include('predictions.urls')),
     path('subscriptions/', include('subscriptions.urls')),
+    path('success/', success_view, name='success'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
