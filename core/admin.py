@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import HeroSection, SportCategory, ContactUs
+from .models import HeroSection, SportCategory, ContactUs, FAQ, FAQCategory
 
 
 @admin.register(HeroSection)
@@ -13,4 +13,19 @@ class SportCategoryAdmin(admin.ModelAdmin):
 @admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
     list_display = ['id', 'full_name', 'email', 'phone', 'message', 'country']
+
+
+@admin.register(FAQCategory)
+class FAQAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    list_filter = ['id', 'name']
+    search_fields = ['id', 'name']
+    
+
+
+@admin.register(FAQ)
+class FAQAdmin(admin.ModelAdmin):
+    list_display = ['id', 'main_heading', 'title', 'title_description', 'category', 'order', 'is_active']
+    list_filter = ['category', 'is_active']
+    search_fields = ['title', 'title_description']
     
