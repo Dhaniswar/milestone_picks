@@ -15,7 +15,7 @@ from subscriptions.views import success_view
 def health_check(request):
     """
     Simple health check endpoint.
-    Returns a 200 OK response with a status message.
+    Returns a 200 OK git .
     """
     return JsonResponse({"status": "ok", "message": "Application is healthy"})
 
