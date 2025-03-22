@@ -31,7 +31,7 @@ if os.environ.get("DEBUG", "False").lower() == "true":
 else:
     ALLOWED_HOSTS = [
         "milestone-picks.eba-qcwqtc55.eu-north-1.elasticbeanstalk.com",
-        ".elasticbeanstalk.com",
+        ".elasticbeanstalk.com", "172.31.40.135",
     ]
 
 CORS_ALLOWED_ORIGINS = [
