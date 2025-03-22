@@ -8,16 +8,8 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from django.http import JsonResponse  # Add this import
 from subscriptions.views import success_view
-
-# Health check view
-def health_check(request):
-    """
-    Simple health check endpoint.
-    Returns a 200 OK git .
-    """
-    return JsonResponse({"status": "ok", "message": "Application is healthy"})
+from .greet import Greet
 
 # Swagger schema view
 schema_view = get_schema_view(
@@ -34,7 +26,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('', health_check, name='health_check'),  # Health check endpoint
+    path('', Greet.as_view(), name='greet'),
     path('admin/', admin.site.urls),
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('core/', include('core.urls')),
