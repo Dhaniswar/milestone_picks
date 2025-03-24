@@ -27,16 +27,40 @@ SECRET_KEY = os.environ.get(
 
 # Set ALLOWED_HOSTS based on the environment
 if os.environ.get("DEBUG", "False").lower() == "true":
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "localhost:3000"]
 else:
     ALLOWED_HOSTS = [
         "milestone-picks.eba-qcwqtc55.eu-north-1.elasticbeanstalk.com",
-        ".elasticbeanstalk.com", "172.31.40.135",
+        ".elasticbeanstalk.com", "172.31.40.135", "localhost:3000"
     ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://milestone-picks.eba-qcwqtc55.eu-north-1.elasticbeanstalk.com"
+    "http://milestone-picks.eba-qcwqtc55.eu-north-1.elasticbeanstalk.com", "http://localhost:3000"
 ]
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
+# If your frontend needs to send credentials (cookies, auth headers)
+CORS_ALLOW_CREDENTIALS = True
 
 
 AUTH_USER_MODEL = "user.User"
