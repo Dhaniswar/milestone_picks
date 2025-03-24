@@ -8,7 +8,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
 from user.sendgrid import send_sendgrid_email
 from .models import User
 from drf_yasg.utils import swagger_auto_schema
@@ -135,3 +136,10 @@ class ResetPasswordView(APIView):
                 return Response({'message': 'Password reset successful'}, status=status.HTTP_200_OK)
             return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+    
