@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import User
 import logging
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.state import token_backend
 
 
 
@@ -75,5 +77,25 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['is_verified'] = self.user.is_verified
         data['username'] = self.user.username
         data['email'] = self.user.email
+        
+        return data
+
+
+
+
+
+class CustomTokenRefreshSerializer(TokenRefreshSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        refresh = self.token_class(attrs["refresh"])
+
+       
+        decoded_payload = token_backend.decode(refresh.token, verify=True)
+        
+        data['refresh'] = str(refresh)
+        data['is_admin'] = decoded_payload.get('is_admin', False)
+        data['is_verified'] = decoded_payload.get('is_verified', False)
+        data['username'] = decoded_payload.get('username', '')
+        data['email'] = decoded_payload.get('email', '')
         
         return data

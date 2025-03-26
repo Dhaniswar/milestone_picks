@@ -10,7 +10,7 @@ from drf_yasg import openapi
 from rest_framework_simplejwt.views import  TokenRefreshView
 from subscriptions.views import success_view
 from .greet import Greet
-from user.views import CustomTokenObtainPairView
+from user.views import CustomTokenObtainPairView, CustomTokenRefreshView
 
 # Swagger schema view
 schema_view = get_schema_view(
@@ -36,7 +36,7 @@ urlpatterns = [
     path('subscriptions/', include('subscriptions.urls')),
     path('success/', success_view, name='success'),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 if os.environ.get('DEBUG'):
