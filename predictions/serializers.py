@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from milestone_picks import settings
-from .models import Sport, Match, Bet
+from .models import Sport, Match, Prediction
 
 class SportSerializer(ModelSerializer):
     class Meta:
@@ -19,12 +19,8 @@ class MatchSerializer(ModelSerializer):
         fields = ['id', 'sport', 'team_1', 'team_2', 'match_date', 'location']
 
 
-class BetSerializer(ModelSerializer):
-    payout = SerializerMethodField()
+class PredictionSerializer(ModelSerializer):
     class Meta:
-        model = Bet
-        fields = ['id', 'user', 'match', 'bet_type', 'odds', 'amount', 'placed_at', 'result', 'payout']
-    
-    def get_payout(self, obj):
-        return obj.calculate_payout()
+        model = Prediction
+        fields = ['id', 'user', 'match', 'prediction_type', 'predicted_outcome', 'placed_at', 'result']
     

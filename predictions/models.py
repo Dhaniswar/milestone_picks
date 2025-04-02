@@ -39,34 +39,22 @@ class Match(models.Model):
     def __str__(self):
         return f"{self.team_1} vs {self.team_2} - {self.match_date}"
 
-class Bet(models.Model):
-    BET_TYPES = [
+class Prediction(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    match = models.ForeignKey(Match, on_delete=models.CASCADE)
+    prediction_type = models.CharField(max_length=20, choices=[
         ('WIN', 'Win'),
         ('LOSE', 'Lose'),
         ('OVER_UNDER', 'Over/Under'),
         ('HANDICAP', 'Handicap'),
         ('OTHER', 'Other'),
-    ]
-
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    match = models.ForeignKey(Match, on_delete=models.CASCADE)
-    bet_type = models.CharField(max_length=20, choices=BET_TYPES)
-    odds = models.DecimalField(max_digits=5, decimal_places=2)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    ])
+    predicted_outcome = models.CharField(max_length=100, help_text="The predicted outcome, e.g., 'Team 1 wins' or 'Over 2.5 goals'")
     placed_at = models.DateTimeField(auto_now_add=True)
-    result = models.CharField(max_length=20, choices=[('PENDING', 'Pending'), ('WON', 'Won'), ('LOST', 'Lost')], default='PENDING')
+    result = models.CharField(max_length=20, choices=[('PENDING', 'Pending'), ('CORRECT', 'Correct'), ('INCORRECT', 'Incorrect')], default='PENDING')
     
     class Meta:
         ordering = ['-id']
 
     def __str__(self):
-        return f"{self.user} - {self.match} - {self.bet_type} - {self.odds}"
-    
-    def calculate_payout(self):
-        """
-        todo
-        Calculate the payout for a winning bet.
-        """
-        if self.result == 'WON':
-            return self.amount * self.odds
-        return 0  # No payout for lost or pending bets
+        return f"{self.user} - {self.match} - {self.prediction_type}"
