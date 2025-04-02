@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Sport, Match, Bet
+from .models import Sport, Match, Prediction
 
 @admin.register(Sport)
 class SportAdmin(admin.ModelAdmin):
@@ -9,6 +9,6 @@ class SportAdmin(admin.ModelAdmin):
 class MatchAdmin(admin.ModelAdmin):
     list_display = ['id', 'sport', 'team_1', 'team_2', 'match_date', 'location']
     
-@admin.register(Bet)
-class BetAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'match', 'bet_type', 'odds', 'amount', 'placed_at', 'result']
+@admin.register(Prediction)
+class PredictionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'match', 'prediction_type', 'predicted_outcome', 'placed_at', 'result']

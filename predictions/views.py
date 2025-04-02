@@ -6,8 +6,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.filters import SearchFilter
 from rest_framework import parsers, renderers
 from milestone_picks.pagination import CustomPagination
-from .models import Sport, Match, Bet
-from .serializers import SportSerializer, MatchSerializer, BetSerializer
+from .models import Sport, Match, Prediction
+from .serializers import SportSerializer, MatchSerializer, PredictionSerializer
 from subscriptions.permissions import HasActiveSubscription 
 
 
@@ -68,12 +68,12 @@ class MatchViewSet(viewsets.ModelViewSet):
     
 
 
-class BetViewSet(viewsets.ModelViewSet):
-    queryset = Bet.objects.all().order_by('-id')
-    serializer_class = BetSerializer
+class PredictionViewSet(viewsets.ModelViewSet):
+    queryset = Prediction.objects.all().order_by('-id')
+    serializer_class = PredictionSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['id', 'user', 'match', 'bet_type', 'odds', 'amount', 'placed_at', 'result']
-    search_fields = ['id', 'user', 'match', 'bet_type', 'odds', 'amount', 'placed_at', 'result']
+    filterset_fields = ['id', 'user', 'match', 'prediction_type', 'predicted_outcome', 'placed_at', 'result']
+    search_fields = ['id', 'user', 'match', 'prediction_type', 'predicted_outcome', 'placed_at', 'result']
     pagination_class = CustomPagination
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
 
@@ -88,27 +88,24 @@ class BetViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if getattr(self, 'swagger_fake_view', False):
-            return Bet.objects.none()
+            return Prediction.objects.none()
         
         user = self.request.user
         
         if user is None or user.is_anonymous:
             # Return an empty queryset for unauthenticated users
-            return Bet.objects.none()
+            return Prediction.objects.none()
         
         if user.is_staff:
             # Admins can see all bets
-            return Bet.objects.all()
+            return Prediction.objects.all()
         
         # Filter bets based on subscription status
         if HasActiveSubscription().has_permission(self.request, self):
             # Users with an active subscription can see all their bets
-            return Bet.objects.filter(user=user)
+            return Prediction.objects.filter(user=user)
         else:
             # Users without an active subscription can only see historical bets
             yesterday = timezone.now() - timezone.timedelta(days=1)
-            return Bet.objects.filter(user=user, placed_at__lt=yesterday)
+            return Prediction.objects.filter(user=user, placed_at__lt=yesterday)
 
-    def perform_create(self, serializer):
-        # Automatically assign the logged-in user as the bet creator
-        serializer.save(user=self.request.user)
