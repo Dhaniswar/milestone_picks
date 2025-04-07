@@ -50,6 +50,7 @@ class Prediction(models.Model):
         ('OTHER', 'Other'),
     ])
     predicted_outcome = models.CharField(max_length=100, help_text="The predicted outcome, e.g., 'Team 1 wins' or 'Over 2.5 goals'")
+    actual_outcome = models.CharField(max_length=100, blank=True, null=True, help_text="What actually happened")
     placed_at = models.DateTimeField(auto_now_add=True)
     result = models.CharField(max_length=20, choices=[('PENDING', 'Pending'), ('CORRECT', 'Correct'), ('INCORRECT', 'Incorrect')], default='PENDING')
     
@@ -58,3 +59,13 @@ class Prediction(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.match} - {self.prediction_type}"
+    
+    
+    def save(self, *args, **kwargs):
+        # Automatically set result if actual_outcome is provided
+        if self.actual_outcome:
+            if self.predicted_outcome == self.actual_outcome:
+                self.result = 'CORRECT'
+            else:
+                self.result = 'INCORRECT'
+        super().save(*args, **kwargs)

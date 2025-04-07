@@ -7,7 +7,7 @@ from .views import SportViewSet, MatchViewSet, PredictionViewSet
 router = DefaultRouter()
 router.register(r'sports', SportViewSet)
 router.register(r'matches', MatchViewSet)
-router.register(r'predictions', PredictionViewSet)
+router.register(r'', PredictionViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
