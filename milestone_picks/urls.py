@@ -35,7 +35,7 @@ urlpatterns = [
     path('predictions/', include('predictions.urls')),
     path('subscriptions/', include('subscriptions.urls')),
     path('success/', success_view, name='success'),
-    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/access', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
 ]
 
