@@ -30,12 +30,12 @@ if os.environ.get("DEBUG", "False").lower() == "true":
     ALLOWED_HOSTS = ["127.0.0.1", "localhost", "localhost:3000"]
 else:
     ALLOWED_HOSTS = [
-        "milestone-picks.eba-qcwqtc55.eu-north-1.elasticbeanstalk.com",
+        "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
         ".elasticbeanstalk.com", "172.31.40.135", "localhost:3000"
     ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://milestone-picks.eba-qcwqtc55.eu-north-1.elasticbeanstalk.com", "http://localhost:3000"
+    "http://milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com", "http://localhost:3000"
 ]
 
 CORS_ALLOW_METHODS = [
