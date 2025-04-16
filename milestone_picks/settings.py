@@ -30,12 +30,14 @@ if os.environ.get("DEBUG", "False").lower() == "true":
     ALLOWED_HOSTS = ["127.0.0.1", "localhost", "localhost:3000"]
 else:
     ALLOWED_HOSTS = [
-        "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
-        ".elasticbeanstalk.com", "172.31.17.224", "localhost:3000"
+    "milestonepicks.com", 
+    "www.milestonepicks.com", 
+    "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
+    ".elasticbeanstalk.com",
     ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com", "http://localhost:3000"
+    "https://milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com", "http://localhost:3000"
 ]
 
 CORS_ALLOW_METHODS = [
@@ -271,13 +273,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Security settings
-# SECURE_HSTS_SECONDS = 31536000  # 1 year
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_HSTS_PRELOAD = True
-# SECURE_SSL_REDIRECT = True
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
-# X_FRAME_OPTIONS = 'DENY'
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# SECURE_BROWSER_XSS_FILTER = True
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
