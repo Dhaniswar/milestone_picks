@@ -21,23 +21,39 @@ SECRET_KEY = os.environ.get(
     "SECRET_KEY", "django-insecure-le5zhcl4x1-dmy6%ud&mxoc$k7bf)lnmk=qejq%c)do(8lb@!7"
 )
 
-# DEBUG=True
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
-# Set ALLOWED_HOSTS based on the environment
-if os.environ.get("DEBUG", "False").lower() == "true":
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "localhost:3000"]
+DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
+
+if DEBUG:
+    # Development settings
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '127.0.0.1:8000', 'localhost:8000']
+    SECURE_SSL_REDIRECT = False  # Disable HTTPS redirect
+    SESSION_COOKIE_SECURE = False  # Allow cookies over HTTP
+    CSRF_COOKIE_SECURE = False  # Allow CSRF cookies over HTTP
+    SECURE_HSTS_SECONDS = 0  # Disable HSTS for development
 else:
+    # Production settings
     ALLOWED_HOSTS = [
     "milestonepicks.com", 
     "www.milestonepicks.com", 
     "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
     ".elasticbeanstalk.com",
     ]
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    
+    
 
 CORS_ALLOWED_ORIGINS = [
-    "https://milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com", "http://localhost:3000"
+    "https://milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com", "http://localhost:3000","http://localhost:3000",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
 ]
 
 CORS_ALLOW_METHODS = [
@@ -86,6 +102,7 @@ INSTALLED_APPS = [
     "predictions",
     "subscriptions",
     "core",
+    "bettinginfo",
 ]
 
 MIDDLEWARE = [
@@ -270,16 +287,3 @@ STATIC_URL = f'https://{os.environ.get("AWS_STORAGE_BUCKET_NAME")}.s3.{os.enviro
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
-# Security settings
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
