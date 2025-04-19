@@ -9,6 +9,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+import requests
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,18 +31,47 @@ SECRET_KEY = os.environ.get(
 
 
 # Set ALLOWED_HOSTS based on the environment
-if os.environ.get("DEBUG", "False").lower() == "true":
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "localhost:3000"]
+DEBUG = (
+    os.environ.get("DEBUG", "False").lower() == "true"
+)  # Default to False for safety
+
+
+def get_instance_ip():
+    try:
+        response = requests.get(
+            "http://169.254.169.254/latest/meta-data/public-ipv4", timeout=2
+        )
+        return response.text
+    except Exception:
+        return None
+
+
+if DEBUG:
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "127.0.0.1:8000", "localhost:8000"]
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_HSTS_SECONDS = 0
 else:
     ALLOWED_HOSTS = [
+        "milestonepicks.com",
+        "www.milestonepicks.com",
         "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
-        ".elasticbeanstalk.com", "172.31.17.224", "52.0.14.241", "localhost:3000"
+        ".elasticbeanstalk.com",
+        "172.31.17.224",  # Keep if needed for internal routing
+        "52.0.14.241",  # Add public IP temporarily
+        "34.236.215.148"
     ]
+    instance_ip = get_instance_ip()
+    if instance_ip:
+        ALLOWED_HOSTS.append(instance_ip)
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
-CORS_ALLOWED_ORIGINS = [
-    "https://milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com", "http://localhost:3000", "172.31.17.224",
-    "52.0.14.241",
-]
 
 CORS_ALLOW_METHODS = [
     "GET",
