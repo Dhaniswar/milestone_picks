@@ -40,6 +40,7 @@ else:
     "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
     ".elasticbeanstalk.com",
     "172.31.17.224",
+    "52.0.14.241",
     
     ]
     SECURE_SSL_REDIRECT = True
