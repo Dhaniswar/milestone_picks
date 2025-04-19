@@ -22,41 +22,22 @@ SECRET_KEY = os.environ.get(
 )
 
 
+# DEBUG=True
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 
-if DEBUG:
-    # Development settings
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '127.0.0.1:8000', 'localhost:8000']
-    SECURE_SSL_REDIRECT = False  # Disable HTTPS redirect
-    SESSION_COOKIE_SECURE = False  # Allow cookies over HTTP
-    CSRF_COOKIE_SECURE = False  # Allow CSRF cookies over HTTP
-    SECURE_HSTS_SECONDS = 0  # Disable HSTS for development
+# Set ALLOWED_HOSTS based on the environment
+if os.environ.get("DEBUG", "False").lower() == "true":
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "localhost:3000"]
 else:
-    # Production settings
     ALLOWED_HOSTS = [
-    "milestonepicks.com", 
-    "www.milestonepicks.com", 
-    "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
-    ".elasticbeanstalk.com",
-    "172.31.17.224",
-    "52.0.14.241",
-    
+        "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
+        ".elasticbeanstalk.com", "172.31.17.224", "52.0.14.241", "localhost:3000"
     ]
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-
-    
-    
 
 CORS_ALLOWED_ORIGINS = [
-    "https://milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com", "http://localhost:3000","http://localhost:3000",
-    "http://127.0.0.1:8000",
-    "http://localhost:8000",
+    "https://milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com", "http://localhost:3000", "172.31.17.224",
+    "52.0.14.241",
 ]
 
 CORS_ALLOW_METHODS = [
