@@ -39,6 +39,8 @@ else:
     "www.milestonepicks.com", 
     "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
     ".elasticbeanstalk.com",
+    "172.31.17.224",
+    
     ]
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
