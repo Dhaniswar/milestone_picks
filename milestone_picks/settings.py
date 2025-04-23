@@ -26,8 +26,8 @@ SECRET_KEY = os.environ.get(
 )
 
 
-# DEBUG=True
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+DEBUG=True
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Set ALLOWED_HOSTS based on the environment
@@ -47,7 +47,7 @@ def get_instance_ip():
 
 
 if DEBUG:
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "127.0.0.1:8000", "localhost:8000"]
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "127.0.0.1:8000", "localhost:8000", "localhost:3000"]
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
@@ -60,7 +60,9 @@ else:
         ".elasticbeanstalk.com",
         "172.31.17.224",  # Keep if needed for internal routing
         "52.0.14.241",  # Add public IP temporarily
-        "34.236.215.148"
+        "34.236.215.148",
+        "localhost",
+        "localhost:3000"
     ]
     instance_ip = get_instance_ip()
     if instance_ip:
