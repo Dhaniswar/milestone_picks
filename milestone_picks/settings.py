@@ -46,65 +46,65 @@ SECRET_KEY = os.environ.get(
 )
 
 
-# DEBUG=True
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+DEBUG=True
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Set ALLOWED_HOSTS based on the environment
-DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+# DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-# Dynamic host configuration
-ALLOWED_HOSTS = [
-    "milestonepicks.com",
-    "www.milestonepicks.com",
-    ".elasticbeanstalk.com",
-    ".us-east-1.elasticbeanstalk.com",
-    "localhost",
-    "127.0.0.1",
-    'iseewhere.com',
-    'tableau-poc.q-centrix.com',
-    'tridot.com',
-    'webhooks.flightstats.com',
-    '44.193.164.124',
-    '52.45.25.47'
-]
-
-
-# Dynamic host detection for Elastic Beanstalk
-try:
-    # Get EC2 instance hostname
-    hostname = socket.gethostname()
-    ALLOWED_HOSTS.append(hostname)
-
-    # Get private IP
-    private_ip = socket.gethostbyname(hostname)
-    ALLOWED_HOSTS.append(private_ip)
-
-    # Get public IP (if available)
-    response = requests.get(
-        "http://169.254.169.254/latest/meta-data/public-ipv4", timeout=2
-    )
-    if response.status_code == 200:
-        ALLOWED_HOSTS.append(response.text)
-except:
-    pass
-
-# In production, log unknown hosts instead of crashing
+# # Dynamic host configuration
+# ALLOWED_HOSTS = [
+#     "milestonepicks.com",
+#     "www.milestonepicks.com",
+#     ".elasticbeanstalk.com",
+#     ".us-east-1.elasticbeanstalk.com",
+#     "localhost",
+#     "127.0.0.1",
+#     'iseewhere.com',
+#     'tableau-poc.q-centrix.com',
+#     'tridot.com',
+#     'webhooks.flightstats.com',
+#     '44.193.164.124',
+#     '52.45.25.47'
+# ]
 
 
-# Security settings
-if DEBUG:
-    SECURE_SSL_REDIRECT = False
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
-    SECURE_HSTS_SECONDS = 0
-else:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+# # Dynamic host detection for Elastic Beanstalk
+# try:
+#     # Get EC2 instance hostname
+#     hostname = socket.gethostname()
+#     ALLOWED_HOSTS.append(hostname)
+
+#     # Get private IP
+#     private_ip = socket.gethostbyname(hostname)
+#     ALLOWED_HOSTS.append(private_ip)
+
+#     # Get public IP (if available)
+#     response = requests.get(
+#         "http://169.254.169.254/latest/meta-data/public-ipv4", timeout=2
+#     )
+#     if response.status_code == 200:
+#         ALLOWED_HOSTS.append(response.text)
+# except:
+#     pass
+
+# # In production, log unknown hosts instead of crashing
+
+
+# # Security settings
+# if DEBUG:
+#     SECURE_SSL_REDIRECT = False
+#     SESSION_COOKIE_SECURE = False
+#     CSRF_COOKIE_SECURE = False
+#     SECURE_HSTS_SECONDS = 0
+# else:
+#     SECURE_SSL_REDIRECT = True
+#     SESSION_COOKIE_SECURE = True
+#     CSRF_COOKIE_SECURE = True
+#     SECURE_HSTS_SECONDS = 31536000
+#     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#     SECURE_HSTS_PRELOAD = True
 
 
 # CORS_ALLOW_ALL_ORIGINS = True
@@ -172,6 +172,7 @@ INSTALLED_APPS = [
     "subscriptions",
     "core",
     "bettinginfo",
+    "aboutsection",
 ]
 
 MIDDLEWARE = [
