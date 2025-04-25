@@ -36,6 +36,7 @@ urlpatterns = [
     path('subscriptions/', include('subscriptions.urls')),
     path('success/', success_view, name='success'),
     path('bettinginfo/', include('bettinginfo.urls')),
+    path('aboutsection/', include('aboutsection.urls')),
     path('api/token/access', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
 ]
