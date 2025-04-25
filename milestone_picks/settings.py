@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 import socket
 from datetime import timedelta
+from django.http import HttpResponseForbidden
 import requests
 from django.conf import settings
 from dotenv import load_dotenv
@@ -10,6 +11,28 @@ load_dotenv()
 
 
 import requests
+
+import logging
+
+logger = logging.getLogger("django.security.DisallowedHost")
+
+
+def skip_disallowed_hosts(get_response):
+    """
+    Custom middleware to gracefully handle DisallowedHost errors.
+    """
+
+    def middleware(request):
+        try:
+            return get_response(request)
+        except Exception as e:
+            if "DisallowedHost" in str(e):
+                host = request.get_host()
+                logger.warning(f"Blocked request with invalid host: {host}")
+                return HttpResponseForbidden("Invalid host header")
+            raise  # Re-raise other exceptions
+
+    return middleware
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,12 +57,12 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 # Dynamic host configuration
 ALLOWED_HOSTS = [
-    'milestonepicks.com',
-    'www.milestonepicks.com',
-    '.elasticbeanstalk.com',
-    '.us-east-1.elasticbeanstalk.com',
-    'localhost',
-    '127.0.0.1',
+    "milestonepicks.com",
+    "www.milestonepicks.com",
+    ".elasticbeanstalk.com",
+    ".us-east-1.elasticbeanstalk.com",
+    "localhost",
+    "127.0.0.1",
 ]
 
 
@@ -48,17 +71,22 @@ try:
     # Get EC2 instance hostname
     hostname = socket.gethostname()
     ALLOWED_HOSTS.append(hostname)
-    
+
     # Get private IP
     private_ip = socket.gethostbyname(hostname)
     ALLOWED_HOSTS.append(private_ip)
-    
+
     # Get public IP (if available)
-    response = requests.get('http://169.254.169.254/latest/meta-data/public-ipv4', timeout=2)
+    response = requests.get(
+        "http://169.254.169.254/latest/meta-data/public-ipv4", timeout=2
+    )
     if response.status_code == 200:
         ALLOWED_HOSTS.append(response.text)
 except:
     pass
+
+# In production, log unknown hosts instead of crashing
+
 
 # Security settings
 if DEBUG:
@@ -108,15 +136,14 @@ CORS_ALLOW_HEADERS = [
 
 # If your frontend needs to send credentials (cookies, auth headers)
 CORS_ALLOW_CREDENTIALS = True
-CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
 
 
 # Security headers
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_REFERRER_POLICY = 'same-origin'
-
+X_FRAME_OPTIONS = "DENY"
+SECURE_REFERRER_POLICY = "same-origin"
 
 
 AUTH_USER_MODEL = "user.User"
@@ -165,6 +192,11 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
+
+
+# Conditionally add the custom middleware in production
+if not DEBUG:
+    MIDDLEWARE.insert(0, "milestone_picks.settings.skip_disallowed_hosts")
 
 
 # AWS S3 Configuration
@@ -326,4 +358,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Health check path
-HEALTH_CHECK_PATH = '/health/'
+HEALTH_CHECK_PATH = "/health/"
