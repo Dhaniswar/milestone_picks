@@ -63,6 +63,11 @@ ALLOWED_HOSTS = [
     ".us-east-1.elasticbeanstalk.com",
     "localhost",
     "127.0.0.1",
+     'iseewhere.com',
+    'tableau-poc.q-centrix.com',
+    'tridot.com',
+    'webhooks.flightstats.com',
+    '44.193.164.124',
 ]
 
 
