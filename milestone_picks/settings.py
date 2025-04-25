@@ -18,20 +18,18 @@ logger = logging.getLogger("django.security.DisallowedHost")
 
 
 def skip_disallowed_hosts(get_response):
-    """
-    Custom middleware to gracefully handle DisallowedHost errors.
-    """
-
     def middleware(request):
+        # First, try to get the host
         try:
+            host = request.get_host()
+            # If we get here, the host is valid
             return get_response(request)
         except Exception as e:
             if "DisallowedHost" in str(e):
-                host = request.get_host()
+                host = request.META.get('HTTP_HOST', 'unknown')
                 logger.warning(f"Blocked request with invalid host: {host}")
                 return HttpResponseForbidden("Invalid host header")
-            raise  # Re-raise other exceptions
-
+            raise
     return middleware
 
 
@@ -63,7 +61,7 @@ ALLOWED_HOSTS = [
     ".us-east-1.elasticbeanstalk.com",
     "localhost",
     "127.0.0.1",
-     'iseewhere.com',
+    'iseewhere.com',
     'tableau-poc.q-centrix.com',
     'tridot.com',
     'webhooks.flightstats.com',
@@ -176,6 +174,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "milestone_picks.settings.skip_disallowed_hosts",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
