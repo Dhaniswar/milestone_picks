@@ -1,10 +1,9 @@
 from pathlib import Path
 import os
+import socket
 from datetime import timedelta
-
+import requests
 from django.conf import settings
-
-# Load environment variables from .env file
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -26,47 +25,48 @@ SECRET_KEY = os.environ.get(
 )
 
 
-DEBUG=True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+# DEBUG=True
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Set ALLOWED_HOSTS based on the environment
-DEBUG = (
-    os.environ.get("DEBUG", "False").lower() == "true"
-)  # Default to False for safety
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+
+# Dynamic host configuration
+ALLOWED_HOSTS = [
+    'milestonepicks.com',
+    'www.milestonepicks.com',
+    '.elasticbeanstalk.com',
+    '.us-east-1.elasticbeanstalk.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 
-def get_instance_ip():
-    try:
-        response = requests.get(
-            "http://169.254.169.254/latest/meta-data/public-ipv4", timeout=2
-        )
-        return response.text
-    except Exception:
-        return None
+# Dynamic host detection for Elastic Beanstalk
+try:
+    # Get EC2 instance hostname
+    hostname = socket.gethostname()
+    ALLOWED_HOSTS.append(hostname)
+    
+    # Get private IP
+    private_ip = socket.gethostbyname(hostname)
+    ALLOWED_HOSTS.append(private_ip)
+    
+    # Get public IP (if available)
+    response = requests.get('http://169.254.169.254/latest/meta-data/public-ipv4', timeout=2)
+    if response.status_code == 200:
+        ALLOWED_HOSTS.append(response.text)
+except:
+    pass
 
-
+# Security settings
 if DEBUG:
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "127.0.0.1:8000", "localhost:8000", "localhost:3000"]
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
     SECURE_HSTS_SECONDS = 0
 else:
-    ALLOWED_HOSTS = [
-        "milestonepicks.com",
-        "www.milestonepicks.com",
-        "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
-        ".elasticbeanstalk.com",
-        "172.31.17.224",  # Keep if needed for internal routing
-        "52.0.14.241",  # Add public IP temporarily
-        "34.236.215.148",
-        "localhost",
-        "localhost:3000"
-    ]
-    instance_ip = get_instance_ip()
-    if instance_ip:
-        ALLOWED_HOSTS.append(instance_ip)
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
@@ -74,7 +74,16 @@ else:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
-CORS_ALLOW_ALL_ORIGINS = True 
+
+# CORS_ALLOW_ALL_ORIGINS = True
+
+# CORS Settings
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://milestonepicks.com",
+    "https://www.milestonepicks.com",
+]
+
 
 CORS_ALLOW_METHODS = [
     "GET",
@@ -99,6 +108,15 @@ CORS_ALLOW_HEADERS = [
 
 # If your frontend needs to send credentials (cookies, auth headers)
 CORS_ALLOW_CREDENTIALS = True
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+
+
+# Security headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_REFERRER_POLICY = 'same-origin'
+
 
 
 AUTH_USER_MODEL = "user.User"
@@ -303,7 +321,9 @@ STATIC_URL = f'https://{os.environ.get("AWS_STORAGE_BUCKET_NAME")}.s3.{os.enviro
 
 # STATIC_URL = '/static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Health check path
+HEALTH_CHECK_PATH = '/health/'
