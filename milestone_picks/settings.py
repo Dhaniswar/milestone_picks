@@ -66,6 +66,7 @@ ALLOWED_HOSTS = [
     'tridot.com',
     'webhooks.flightstats.com',
     '44.193.164.124',
+    '52.45.25.47'
 ]
 
 
