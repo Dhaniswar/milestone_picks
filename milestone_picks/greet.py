@@ -11,6 +11,6 @@ class Greet(APIView):
     
     def get(self, request):
         
-        return Response({"message": "Hello, Welcome to Milestone Picks, Application is healthy. And this api is for application health check"}, status=status.HTTP_200_OK)
+        return Response({"message": "Hello, Welcome to Milestone Picks, Application is running healthy. And this api is for application health check"}, status=status.HTTP_200_OK)
         
         
