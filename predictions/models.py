@@ -19,11 +19,6 @@ class Sport(models.Model):
             "s3_obj": AWSSignedURL.get(key=self.icon.name),
         }
 
-    def sport_icon(self):
-        return {
-            "s3_obj": AWSSignedURL.get(key=self.icon.name),
-        }
-
 
 class Match(models.Model):
     sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
