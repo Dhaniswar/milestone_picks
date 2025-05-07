@@ -72,8 +72,8 @@ class PredictionViewSet(viewsets.ModelViewSet):
     queryset = Prediction.objects.all().order_by('-id')
     serializer_class = PredictionSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ['id', 'user', 'match', 'prediction_type', 'predicted_outcome', 'placed_at', 'result']
-    search_fields = ['id', 'user', 'match', 'prediction_type', 'predicted_outcome', 'placed_at', 'result']
+    filterset_fields = ['id', 'user', 'match', 'prediction_type', 'predicted_outcome', 'placed_at', 'result', 'our_prediction', 'confidence_level']
+    search_fields = ['id', 'user', 'match', 'prediction_type', 'predicted_outcome', 'placed_at', 'result', 'our_prediction', 'confidence_level']
     pagination_class = CustomPagination
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
 
