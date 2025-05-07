@@ -1,4 +1,5 @@
 from django.db import models
+from milestone_picks.s3_setup import AWSSignedURL
 
 from django.utils.translation import gettext_lazy as _
 
@@ -12,6 +13,11 @@ class AboutSection(models.Model):
 
     def __str__(self):
         return self.main_title
+    
+    def about_background_image(self):
+        return {
+            "s3_obj": AWSSignedURL.get(key=self.background_image.name),
+        }
 
 
 class Statistic(models.Model):
@@ -45,6 +51,11 @@ class MissionSection(models.Model):
 
     def __str__(self):
         return self.title
+
+    def mission_section_image(self):
+        return {
+            "s3_obj": AWSSignedURL.get(key=self.image.name),
+        }
 
 
 class WhyChooseUs(models.Model):
@@ -85,6 +96,13 @@ class BettingPhilosophy(models.Model):
 
     def __str__(self):
         return self.title
+
+    def betting_philosophy_image(self):
+        return {
+            "s3_obj": AWSSignedURL.get(key=self.image.name),
+        }
+
+
 
 
 class ValueProposition(models.Model):

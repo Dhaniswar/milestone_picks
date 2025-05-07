@@ -47,8 +47,8 @@ class AboutSectionViewSet(ModelViewSet):
     serializer_class = AboutSectionSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ["id", "is_active"]
-    search_fields = ["main_title", "main_description"]
+    filterset_fields = ["id", "main_title", "main_description", "created_at", "updated_at"]
+    search_fields = ["id", "main_title", "main_description", "created_at", "updated_at"]
     pagination_class = CustomPagination
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
@@ -61,8 +61,8 @@ class StatisticViewSet(ModelViewSet):
     serializer_class = StatisticSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ["id", "section", "is_active"]
-    search_fields = ["number", "description"]
+    filterset_fields = ["id","icon", "section", "number", "description"]
+    search_fields = ["id","icon", "section", "number", "description"]
     pagination_class = CustomPagination
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
@@ -80,8 +80,8 @@ class MissionSectionViewSet(ModelViewSet):
     serializer_class = MissionSectionSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ["id", "is_active"]
-    search_fields = ["title", "description"]
+    filterset_fields = ["id", "title", "description"]
+    search_fields =  ["id", "title", "description"]
     pagination_class = CustomPagination
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
@@ -95,8 +95,8 @@ class WhyChooseUsViewSet(ModelViewSet):
     serializer_class = WhyChooseUsSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ["id", "is_active"]
-    search_fields = ["title", "description"]
+    filterset_fields = ["id" ,"title", "description"]
+    search_fields = ["id" ,"title", "description"]
     pagination_class = CustomPagination
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
@@ -109,8 +109,8 @@ class FeatureViewSet(ModelViewSet):
     serializer_class = FeatureSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ["id", "is_active"]
-    search_fields = ["title", "description"]
+    filterset_fields = ["id" ,"title", "description", "icon"]
+    search_fields = ["id" ,"title", "description", "icon"]
     pagination_class = CustomPagination
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
@@ -129,8 +129,8 @@ class BettingPhilosophyViewSet(ModelViewSet):
     serializer_class = BettingPhilosophySerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ["id", "is_active"]
-    search_fields = ["title", "description"]
+    filterset_fields = ["id" ,"title", "description"]
+    search_fields = ["id" ,"title", "description"]
     pagination_class = CustomPagination
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
@@ -145,8 +145,8 @@ class ValuePropositionViewSet(ModelViewSet):
     serializer_class = ValuePropositionSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ["id", "is_active"]
-    search_fields = ["title", "description"]
+    filterset_fields = ["id" ,"title", "description"]
+    search_fields = ["id" ,"title", "description"]
     pagination_class = CustomPagination
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
@@ -161,8 +161,8 @@ class ValueItemViewSet(ModelViewSet):
     serializer_class = ValueItemSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ["id", "proposition", "is_active"]
-    search_fields = ["title", "description"]
+    filterset_fields = ["id" ,"title", "description", "icon"]
+    search_fields = ["id" ,"title", "description", "icon"]
     pagination_class = CustomPagination
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
@@ -182,8 +182,8 @@ class TestimonialViewSet(ModelViewSet):
     serializer_class = TestimonialSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ["id", "is_active"]
-    search_fields = ["quote", "author", "position"]
+    filterset_fields = ["id", "quote", "author", "position", "join_date"]
+    search_fields = ["id", "quote", "author", "position", "join_date"]
     pagination_class = CustomPagination
     http_method_names = ["get", "post", "put", "patch", "delete"]
 
@@ -197,8 +197,8 @@ class CallToActionViewSet(ModelViewSet):
     serializer_class = CallToActionSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_fields = ["id", "is_active"]
-    search_fields = ["title", "description", "button_text"]
+    filterset_fields = ["id", "title", "description", "button_text"]
+    search_fields = ["id", "title", "description", "button_text"]
     pagination_class = CustomPagination
     http_method_names = ["get", "post", "put", "patch", "delete"]
 

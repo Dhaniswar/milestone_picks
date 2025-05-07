@@ -7,6 +7,9 @@ class SportSerializer(ModelSerializer):
     class Meta:
         model = Sport
         fields = ["id", "name", "icon"]
+        extra_kwargs = {
+            'name': {'validators': []}
+        }
 
     def get_icon(self, obj):
         if obj.icon:
@@ -20,6 +23,12 @@ class MatchSerializer(ModelSerializer):
     class Meta:
         model = Match
         fields = ["id", "team_1", "team_2", "match_date", "location", "sport"]
+        
+    def create(self, validated_data):
+        sport_data = validated_data.pop('sport')
+        sport, _ = Sport.objects.get_or_create(**sport_data)
+        return Match.objects.create(sport=sport, **validated_data)
+
 
 
 class PredictionSerializer(ModelSerializer):
@@ -38,3 +47,11 @@ class PredictionSerializer(ModelSerializer):
             "confidence_level",
             "match",
         ]
+    
+    def create(self, validated_data):
+        match_data = validated_data.pop('match')
+        match_serializer = MatchSerializer(data=match_data)
+        match_serializer.is_valid(raise_exception=True)
+        match = match_serializer.save()
+        
+        return Prediction.objects.create(match=match, **validated_data)
