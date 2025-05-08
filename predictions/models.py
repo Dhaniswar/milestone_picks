@@ -29,6 +29,7 @@ class Match(models.Model):
 
     class Meta:
         ordering = ["-id"]
+        unique_together = ['sport', 'team_1', 'team_2', 'match_date']
 
     def __str__(self):
         return f"{self.team_1} vs {self.team_2} - {self.match_date}"
