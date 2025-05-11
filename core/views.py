@@ -5,6 +5,9 @@ from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from milestone_picks.pagination import CustomPagination
+from django_countries import countries
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .models import HeroSection, SportCategory, ContactUs, FAQ, Testimonial
 from .serializers import (
     HeroSectionSerializer,
@@ -86,3 +89,10 @@ class TestimonialViewSet(ModelViewSet):
     filterset_fields = ["id", "name", "role", "description", "star_rating"]
     pagination_class = CustomPagination
     http_method_names = ["get", "post", "put", "patch", "delete"]
+
+
+class CountryListView(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request):
+        return Response(dict(countries))
