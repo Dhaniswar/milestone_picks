@@ -6,7 +6,7 @@ from datetime import timedelta
 from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -136,6 +136,7 @@ def stripe_webhook(request):
 
 
 class PlanViewSet(ModelViewSet):
+    permission_classes = [AllowAny]
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
     
@@ -144,7 +145,7 @@ class PlanViewSet(ModelViewSet):
 
 
 
-class SubscriptionViewSet(ReadOnlyModelViewSet):
+class SubscriptionViewSet(ModelViewSet):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
     permission_classes = [IsAuthenticated]
