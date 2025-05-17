@@ -55,6 +55,7 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 # Dynamic host configuration
 ALLOWED_HOSTS = [
+    "52.4.219.148",
     "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
     "api.milestonepicks.com",
     "milestonepicks.com",
