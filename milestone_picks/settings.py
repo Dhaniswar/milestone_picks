@@ -55,6 +55,8 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 # Dynamic host configuration
 ALLOWED_HOSTS = [
+    "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
+    "api.milestonepicks.com",
     "milestonepicks.com",
     "www.milestonepicks.com",
     ".elasticbeanstalk.com",
@@ -114,6 +116,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://milestonepicks.com",
     "https://www.milestonepicks.com",
+    "https://api.milestonepicks.com"
+    
 ]
 
 
