@@ -9,7 +9,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework_simplejwt.views import  TokenRefreshView
 from subscriptions.views import success_view
-from .greet import Greet
+from .greet import Greet, health_check
 from user.views import CustomTokenObtainPairView, CustomTokenRefreshView
 
 # Swagger schema view
@@ -28,6 +28,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('', Greet.as_view(), name='greet'),
+    path('health/', health_check, name='health-check'),  # Simple endpoint for EB
+    path('api/health/', Greet.as_view(), name='api-health'),  # Detailed health check
     path('admin/', admin.site.urls),
     path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('core/', include('core.urls')),
