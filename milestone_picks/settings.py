@@ -17,12 +17,15 @@ import logging
 logger = logging.getLogger("django.security.DisallowedHost")
 
 
+
 def skip_disallowed_hosts(get_response):
     def middleware(request):
-        # First, try to get the host
+        # Bypass host check for health endpoints
+        if request.path in ['/health/', '/health']:
+            return get_response(request)
+            
         try:
             host = request.get_host()
-            # If we get here, the host is valid
             return get_response(request)
         except Exception as e:
             if "DisallowedHost" in str(e):
@@ -31,6 +34,7 @@ def skip_disallowed_hosts(get_response):
                 return HttpResponseForbidden("Invalid host header")
             raise
     return middleware
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -50,12 +54,35 @@ SECRET_KEY = os.environ.get(
 # ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
+
+
+def get_ec2_instance_ips():
+    """Get all possible EC2 instance IPs"""
+    try:
+        # Get private IP
+        hostname = socket.gethostname()
+        private_ip = socket.gethostbyname(hostname)
+        
+        # Get public IP if available
+        try:
+            public_ip = requests.get('http://169.254.169.254/latest/meta-data/public-ipv4', timeout=0.1).text
+        except:
+            public_ip = None
+            
+        return {private_ip, public_ip} if public_ip else {private_ip}
+    except:
+        return set()
+
+
+
+
 # Set ALLOWED_HOSTS based on the environment
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 # Dynamic host configuration
 ALLOWED_HOSTS = [
     "52.4.219.148",
+    "34.200.210.186",
     "milestone-picks.eba-y7t33j83.us-east-1.elasticbeanstalk.com",
     "api.milestonepicks.com",
     "milestonepicks.com",
@@ -72,27 +99,8 @@ ALLOWED_HOSTS = [
     '52.45.25.47'
 ]
 
-
-# Dynamic host detection for Elastic Beanstalk
-try:
-    # Get EC2 instance hostname
-    hostname = socket.gethostname()
-    ALLOWED_HOSTS.append(hostname)
-
-    # Get private IP
-    private_ip = socket.gethostbyname(hostname)
-    ALLOWED_HOSTS.append(private_ip)
-
-    # Get public IP (if available)
-    response = requests.get(
-        "http://169.254.169.254/latest/meta-data/public-ipv4", timeout=2
-    )
-    if response.status_code == 200:
-        ALLOWED_HOSTS.append(response.text)
-except:
-    pass
-
-# In production, log unknown hosts instead of crashing
+# Add EC2 instance IPs
+ALLOWED_HOSTS.extend(get_ec2_instance_ips())
 
 
 # Security settings
