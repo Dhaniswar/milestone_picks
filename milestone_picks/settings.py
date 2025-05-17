@@ -21,7 +21,7 @@ logger = logging.getLogger("django.security.DisallowedHost")
 def skip_disallowed_hosts(get_response):
     def middleware(request):
         # Bypass host check for health endpoints
-        if request.path in ['/health/', '/health']:
+        if request.path in ['/health/', '/health', '/health', '/']:
             return get_response(request)
             
         try:
@@ -92,9 +92,10 @@ ALLOWED_HOSTS = [
     'tridot.com',
     'webhooks.flightstats.com',
     '44.193.164.124',
-    '52.45.25.47'
+    '52.45.25.47',
+    '.execute-api.us-east-1.amazonaws.com',  # For API Gateway
+    '.route53resolver.us-east-1.amazonaws.com'  # For internal DNS
 ]
-
 # Add EC2 instance IPs
 ALLOWED_HOSTS.extend(get_ec2_instance_ips())
 
@@ -105,6 +106,7 @@ if DEBUG:
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
     SECURE_HSTS_SECONDS = 0
+    ALLOWED_HOSTS.extend(['*'])
 else:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -157,7 +159,7 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 SECURE_REFERRER_POLICY = "same-origin"
-
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 AUTH_USER_MODEL = "user.User"
 
