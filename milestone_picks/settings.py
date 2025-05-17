@@ -45,13 +45,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY", "django-insecure-le5zhcl4x1-dmy6%ud&mxoc$k7bf)lnmk=qejq%c)do(8lb@!7"
-)
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 
-# DEBUG=True
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 
@@ -118,7 +114,7 @@ else:
     SECURE_HSTS_PRELOAD = True
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
 
 # CORS Settings
 CORS_ALLOWED_ORIGINS = [
@@ -189,8 +185,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "milestone_picks.settings.skip_disallowed_hosts",
     "django.middleware.security.SecurityMiddleware",
+    "milestone_picks.settings.skip_disallowed_hosts",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
